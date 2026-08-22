@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Volio — Welcome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,6 +18,7 @@
       --muted:   #888888;
       --border:  #e8e8e8;
       --gray-bg: #f4f5f7;
+      --bar-h:   clamp(60px, 8svh, 72px);
     }
 
     html, body {
@@ -46,9 +47,10 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      position: relative;
     }
 
-    /* ── WELCOME SLIDE ───────────────────────── */
+    /* ── SLIDE 1 · WELCOME ───────────────────── */
     .slide-welcome {
       align-items: center;
       justify-content: center;
@@ -83,47 +85,108 @@
       max-width: 240px;
     }
 
-    /* ── SCREENSHOT AREA ─────────────────────── */
+    /* ── VIDEO SLIDE ─────────────────────────── */
+    .slide-video {
+      background: #000;
+      justify-content: flex-start;
+    }
+
+    .slide-video video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-scrim {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 42%;
+      background: linear-gradient(180deg,
+                  rgba(5,14,30,0.82) 0%,
+                  rgba(5,14,30,0.55) 45%,
+                  rgba(5,14,30,0) 100%);
+      pointer-events: none;
+    }
+
+    .video-copy {
+      position: relative;
+      z-index: 2;
+      padding: calc(env(safe-area-inset-top, 0px) + clamp(28px, 6svh, 56px))
+               clamp(22px, 7vw, 40px) 0;
+      max-width: 92%;
+    }
+
+    .video-tag {
+      display: block;
+      font-size: clamp(8px, 2.2vw, 10px);
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: clamp(6px, 1.2svh, 10px);
+    }
+
+    .video-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(28px, 8vw, 44px);
+      line-height: 1;
+      letter-spacing: -0.3px;
+      color: var(--white);
+      text-shadow: 0 2px 18px rgba(0,0,0,0.35);
+    }
+
+    /* ── SCREENSHOT SLIDES ───────────────────── */
     .slide-img {
       width: 100%;
-      /* scales with screen height: taller phone = bigger image area */
-      height: clamp(200px, 60svh, 68svh);
+      height: clamp(240px, 70svh, 74svh);
       flex-shrink: 0;
       position: relative;
       overflow: hidden;
       background: var(--gray-bg);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: clamp(6px, 1.5svh, 14px);
+    }
+
+    /* soft fade where the mockup runs past the bottom of the area */
+    .slide-img::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: clamp(40px, 8svh, 70px);
+      background: linear-gradient(180deg, rgba(244,245,247,0) 0%, var(--gray-bg) 82%);
+      pointer-events: none;
     }
 
     .slide-img img {
-      width: auto;
-      height: 100%;
-      max-width: 100%;
-      object-fit: contain;
-      object-position: center bottom;
+      width: min(92%, 420px);
+      height: auto;
       display: block;
-      margin: 0 auto;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.08));
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,0.10));
     }
 
-    /* ── TEXT AREA ───────────────────────────── */
     .slide-text {
       flex: 1;
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: clamp(6px, 1.5svh, 12px) clamp(20px, 6vw, 32px) clamp(68px, 9svh, 84px);
+      padding: clamp(10px, 2svh, 18px) clamp(20px, 6vw, 32px) clamp(66px, 8.5svh, 80px);
       overflow: hidden;
     }
 
-    /* ghost step number */
     .step-ghost {
       position: absolute;
       right: -4px;
       bottom: clamp(36px, 6svh, 52px);
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 900;
-      font-size: clamp(80px, 26vw, 130px);
+      font-size: clamp(62px, 20vw, 100px);
       line-height: 1;
       letter-spacing: -4px;
       color: rgba(29, 65, 159, 0.055);
@@ -147,7 +210,6 @@
       line-height: 1;
       letter-spacing: -0.3px;
       color: var(--navy);
-      margin-bottom: clamp(8px, 1.5svh, 14px);
     }
 
     .slide-desc {
@@ -156,27 +218,35 @@
       line-height: 1.7;
       color: var(--muted);
       max-width: 90%;
+      margin-top: clamp(8px, 1.5svh, 14px);
     }
 
-    .ui-pill {
-      display: inline-flex;
-      align-items: center;
-      background: rgba(29,65,159,0.08);
-      border: 1px solid rgba(29,65,159,0.22);
-      border-radius: 6px;
-      padding: 0 8px 1px;
-      font-size: clamp(11px, 3vw, 13px);
-      font-weight: 700;
-      color: var(--blue);
-      white-space: nowrap;
-      vertical-align: middle;
+    /* ── REVERSED SLIDE (text on top, mockup below) ── */
+    .slide-reverse .slide-text {
+      flex: 0 0 auto;
+      justify-content: flex-end;
+      padding: calc(env(safe-area-inset-top, 0px) + clamp(26px, 5svh, 48px))
+               clamp(20px, 6vw, 32px) clamp(12px, 2.5svh, 22px);
+    }
+
+    .slide-reverse .step-ghost {
+      bottom: auto;
+      top: calc(env(safe-area-inset-top, 0px) + clamp(10px, 2svh, 24px));
+    }
+
+    .slide-reverse .slide-img {
+      flex: 1 1 auto;
+      height: auto;
+      min-height: 0;
+      align-items: flex-start;
+      padding-top: 0;
     }
 
     /* ── BOTTOM BAR ──────────────────────────── */
     #bottom-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
-      height: clamp(60px, 8svh, 72px);
+      height: var(--bar-h);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -184,6 +254,15 @@
       background: var(--white);
       border-top: 1px solid var(--border);
       z-index: 300;
+      transition: background 0.35s, border-color 0.35s;
+    }
+
+    /* dark variant when the active slide is a video slide */
+    #bottom-bar.on-dark {
+      background: rgba(5,14,30,0.55);
+      border-top-color: rgba(255,255,255,0.12);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     #dots {
@@ -206,6 +285,9 @@
       border-radius: 3px;
     }
 
+    #bottom-bar.on-dark .dot        { background: rgba(255,255,255,0.28); }
+    #bottom-bar.on-dark .dot.active { background: var(--white); }
+
     .nav-arrow {
       width: clamp(38px, 10vw, 44px);
       height: clamp(38px, 10vw, 44px);
@@ -217,23 +299,21 @@
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
-      transition: opacity 0.25s, transform 0.15s;
+      transition: opacity 0.25s, transform 0.15s, background 0.35s, border-color 0.35s;
     }
 
     .nav-arrow:active { transform: scale(0.88); }
 
-    #next-btn {
-      background: var(--navy);
-      border-color: var(--navy);
-    }
-
-    #next-btn svg { stroke: white; margin-left: 1px; }
+    #next-btn { background: var(--navy); border-color: var(--navy); }
+    #next-btn svg { stroke: #fff; margin-left: 1px; }
     #back-btn svg { stroke: var(--navy); margin-right: 1px; }
 
-    .nav-arrow.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
+    #bottom-bar.on-dark #next-btn      { background: var(--white); border-color: var(--white); }
+    #bottom-bar.on-dark #next-btn svg  { stroke: var(--navy); }
+    #bottom-bar.on-dark #back-btn      { background: transparent; border-color: rgba(255,255,255,0.35); }
+    #bottom-bar.on-dark #back-btn svg  { stroke: #fff; }
+
+    .nav-arrow.hidden { opacity: 0; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -269,69 +349,55 @@
     <p class="welcome-sub">The social network for the aviation world.</p>
   </div>
 
-  <!-- SLIDE 1 · PROFILE -->
-  <div class="slide">
-    <div class="slide-img">
-      <img src="profile.png" alt="Profile">
-    </div>
-    <div class="slide-text">
-      <span class="step-ghost">01</span>
-      <span class="slide-tag">Profile</span>
-      <h2 class="slide-title">YOUR AVIATION<br/>IDENTITY</h2>
-      <p class="slide-desc">Set up your profile and show the aviation world who you are — pilot, cabin crew, or anyone who flies. Your story, your sky.</p>
+  <!-- SLIDE 1 · UPLOAD VIDEO -->
+  <div class="slide slide-video" data-dark="1">
+    <video src="volio_upload.mp4"
+           muted loop playsinline webkit-playsinline preload="auto"></video>
+    <div class="video-scrim"></div>
+    <div class="video-copy">
+      <span class="video-tag">Step 01</span>
+      <h2 class="video-title">HOW TO UPLOAD<br/>YOUR FIRST FLIGHT</h2>
     </div>
   </div>
 
-  <!-- SLIDE 2 · FEED -->
+  <!-- SLIDE 2 · PROFILE -->
   <div class="slide">
     <div class="slide-img">
-      <img src="feed.png" alt="Feed">
+      <img src="profile.png" alt="Profile" />
     </div>
     <div class="slide-text">
       <span class="step-ghost">02</span>
-      <span class="slide-tag">Feed</span>
-      <h2 class="slide-title">EXPLORE<br/>THE SKIES</h2>
-      <p class="slide-desc">Browse flights, routes, and stories from across the aviation world. Tap any card to dive into the full story.</p>
+      <span class="slide-tag">Profile</span>
+      <h2 class="slide-title">PERSONALISE<br/>YOUR PROFILE</h2>
+      <p class="slide-desc">Add your organisation and reference airport.</p>
     </div>
   </div>
 
-  <!-- SLIDE 3 · SHARE -->
-  <div class="slide">
-    <div class="slide-img">
-      <img src="share.png" alt="Share">
-    </div>
+  <!-- SLIDE 3 · SEARCH -->
+  <div class="slide slide-reverse">
     <div class="slide-text">
       <span class="step-ghost">03</span>
-      <span class="slide-tag">Share</span>
-      <h2 class="slide-title">SHARE<br/>YOUR FLIGHT</h2>
-      <p class="slide-desc">Tap <span class="ui-pill">＋</span>, log your flight or experience, add details, and share it with the aviation community.</p>
-    </div>
-  </div>
-
-  <!-- SLIDE 4 · SEARCH -->
-  <div class="slide">
-    <div class="slide-img">
-      <img src="search.png" alt="Search">
-    </div>
-    <div class="slide-text">
-      <span class="step-ghost">04</span>
       <span class="slide-tag">Search</span>
-      <h2 class="slide-title">FIND YOUR<br/>PEOPLE</h2>
-      <p class="slide-desc">Find pilots, cabin crew, and everyone who flies. Follow their journeys and get inspired by every flight.</p>
+      <h2 class="slide-title">SEARCH FOR YOUR<br/>FRIENDS AND COLLEAGUES</h2>
+    </div>
+    <div class="slide-img">
+      <img src="users.png" alt="Search for users" />
     </div>
   </div>
 
 </div><!-- /slider -->
 
 <script>
-  const TOTAL = 5;
-  let current = 0;
-  let startX = 0, startY = 0, isDragging = false, dragDelta = 0, isH = null;
-
   const slider  = document.getElementById('slider');
+  const slides  = Array.from(slider.querySelectorAll('.slide'));
+  const TOTAL   = slides.length;
   const dotsEl  = document.getElementById('dots');
+  const bar     = document.getElementById('bottom-bar');
   const backBtn = document.getElementById('back-btn');
   const nextBtn = document.getElementById('next-btn');
+
+  let current = 0;
+  let startX = 0, startY = 0, isDragging = false, dragDelta = 0, isH = null;
 
   for (let i = 0; i < TOTAL; i++) {
     const d = document.createElement('div');
@@ -339,18 +405,31 @@
     dotsEl.appendChild(d);
   }
 
+  function syncVideos() {
+    slides.forEach((s, i) => {
+      const v = s.querySelector('video');
+      if (!v) return;
+      if (i === current) { v.currentTime = 0; v.play().catch(() => {}); }
+      else               { v.pause(); }
+    });
+  }
+
   function updateUI() {
     document.querySelectorAll('.dot').forEach((d, i) =>
       d.classList.toggle('active', i === current));
     backBtn.classList.toggle('hidden', current === 0);
     nextBtn.classList.toggle('hidden', current === TOTAL - 1);
+    bar.classList.toggle('on-dark', slides[current].dataset.dark === '1');
+    syncVideos();
   }
 
   function goTo(n) {
-    current = Math.max(0, Math.min(TOTAL - 1, n));
+    const target = Math.max(0, Math.min(TOTAL - 1, n));
+    const changed = target !== current;
+    current = target;
     slider.style.transition = 'transform 0.42s cubic-bezier(0.4,0,0.2,1)';
     slider.style.transform  = `translateX(-${current * 100}vw)`;
-    updateUI();
+    if (changed) updateUI(); else bar.classList.toggle('on-dark', slides[current].dataset.dark === '1');
   }
 
   function next() { goTo(current + 1); }
